@@ -72,4 +72,19 @@ function m.range(start, stop, step)
   return acc
 end
 
+
+function m.sequence_memo(generator)
+  local memo_table = {}
+  local current_max = 0
+  return function(n)
+    if n > current_max then
+      for i=current_max+1, n do
+        memo_table[i] = generator()
+      end
+      current_max = n
+    end
+    return memo_table[n]
+  end
+end
+
 return m
