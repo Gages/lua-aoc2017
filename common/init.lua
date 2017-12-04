@@ -119,4 +119,8 @@ function m.anagram_normalise(word)
   return table.concat(letters, "")
 end
 
+function m.puzzle_input(dayn)
+  return io.input(string.format("input/%d.txt",dayn)):read("*a")
+end
+
 return m

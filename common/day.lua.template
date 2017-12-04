@@ -1,0 +1,24 @@
+local common = require "common"
+
+function day%DAY%_part1(input)
+  
+end
+
+function day%DAY%_part2(input)
+  
+end
+
+--[[
+  Tests Part 1
+]]
+assert(day%DAY%_part1 "" == nil)
+
+--[[
+  Tests Part 2
+]]
+assert(day%DAY%_part2 "" == nil)
+
+--Answers
+local puzzle_input = common.puzzle_input (%DAY%)
+print("Day %DAY%, Part 1: ", day%DAY%_part1(puzzle_input)) --??
+print("Day %DAY%, Part 2: ", day%DAY%_part2(puzzle_input)) --??
