@@ -87,4 +87,36 @@ function m.sequence_memo(generator)
   end
 end
 
+function m.count(pred, t)
+  --return #(m.filter(m.id, m.map(pred, t)))
+  local total = 0
+  for _, v in ipairs(t) do
+    if pred(v) then
+      total = total + 1
+    end
+  end
+  return total
+end
+
+function m.id(x) return x end
+
+function m.filter(pred, t)
+    local acc =  {}
+    for _, v in ipairs(t) do
+      if pred(v) then
+        table.insert(acc, v)
+      end
+    end
+    return acc
+end
+
+function m.anagram_normalise(word)
+  local letters = {}
+  for c in string.gmatch(word, "(.)") do
+    table.insert(letters, c)
+  end
+  table.sort(letters)
+  return table.concat(letters, "")
+end
+
 return m
