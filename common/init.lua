@@ -16,6 +16,34 @@ function m.grid(input)
   return rows
 end
 
+function m.list(input)
+  return m.split(input, "%s")
+end
+
+function m.split(input, pattern, plain, keep_empty)
+  local plain = plain or false
+  local keep_empty = keep_empty or false
+  local acc = {}
+  local function split_helper(start)
+    if start > #input then return acc end
+    local mstart, mend = string.find(input, pattern, start, plain)
+    if not mstart then
+      mstart = #input + 1
+      mend = #input
+    end
+    --if mstart == start, then only add the empty
+    --string to the acc list if keep_empty is true.
+    if mstart == start and keep_empty then
+      table.insert(acc, "")
+    elseif mstart > start then
+      table.insert(acc, string.sub(input, start, mstart-1))
+    end  
+    return split_helper(mend+1)
+  end
+  return split_helper(1)
+end
+
+
 function m.map(f, t)
   local acc = {}
   for _, v in ipairs(t) do
