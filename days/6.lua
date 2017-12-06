@@ -19,22 +19,20 @@ local function cycle(banks)
     banks[index] = banks[index] + 1
   end
 end
-function run(input)
+local function run(input)
   local banks = common.map(tonumber, common.list(input))
   local store = {}
-  local result
   local count = 0
   while true do
-    result = table.concat(banks)
-    if store[result] then
-      return count, store[result]
+    local k = table.concat(banks)
+    if store[k] then
+      return count, store[k]
     else
-      store[result] = count
+      store[k] = count
     end
     cycle(banks)
     count = count + 1
   end
-  return count
 end
 
 function day6_part1(input)
