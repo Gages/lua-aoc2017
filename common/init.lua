@@ -17,7 +17,11 @@ function m.grid(input)
 end
 
 function m.list(input)
-  return m.split(input, "%s")
+  return m.split(input, "%s+")
+end
+
+function m.lines(input)
+  return m.split(input, "\n", true, true)
 end
 
 function m.split(input, pattern, plain, keep_empty)
@@ -138,6 +142,33 @@ function m.filter(pred, t)
     return acc
 end
 
+function m.not_equals(v)
+  return function(x) return x ~= v end
+end
+
+--Find the odd one out of a group.
+function m.odd_one_out_by(group, selector)
+  local function find_odd_three(offset)
+    local a, b, c = selector(group[offset]), selector(group[offset + 1]), selector(group[offset + 2])
+    if a == b and b == c then return end
+    if a == b then
+        return group[offset + 2] --c
+    elseif a == c then
+        return group[offset + 1] --b
+    elseif b == c then
+        return group[offset + 0] --a
+    end
+    error()
+  end
+  local offset = 1
+  local odd
+  while not odd and offset + 2 <= #group do
+    odd = find_odd_three(offset)
+    offset = offset + 1
+  end
+  return odd
+end
+
 function m.anagram_normalise(word)
   local letters = {}
   for c in string.gmatch(word, "(.)") do
@@ -149,6 +180,16 @@ end
 
 function m.puzzle_input(dayn)
   return io.input(string.format("input/%d.txt",dayn)):read("*a")
+end
+
+function m.set(items)
+  local seen = {}
+  local acc = {}
+  for _, v in ipairs(items) do
+      if not seen[v] then table.insert(acc, v) end
+      seen[v] = true
+  end
+  return acc
 end
 
 return m
