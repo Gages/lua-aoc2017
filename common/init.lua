@@ -192,4 +192,20 @@ function m.set(items)
   return acc
 end
 
+function m.pairs(t)
+  local acc = {}
+  for k, v in pairs(t) do
+    table.insert(acc, {k, v})
+  end
+  return acc
+end
+
+function m.values(t)
+  local acc = {}
+  for _, v in pairs(t) do
+    table.insert(acc, v)
+  end
+  return acc  
+end
+
 return m
