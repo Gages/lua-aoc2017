@@ -1,7 +1,17 @@
 local m = {}
 
+m.bit = require "common.bit"
+
 function m.at(s, i)
     return string.sub(s, i+1, i+1)
+end
+
+function m.bytes(input)
+  local acc = {}
+  for i=1,#input do
+    table.insert(acc, string.byte(input, i))
+  end
+  return acc
 end
 
 function m.grid(input)
@@ -96,14 +106,33 @@ function m.compose(f, g)
 end
 
 function m.range(start, stop, step)
+    assert(start)
   local step = step or 1
+  if not stop then
+    stop, start = start, 0
+  end
+  assert(stop)
+  assert(step)
   local acc = {}
-  for i=start,stop,step do
+  for i=start,stop-1,step do
     table.insert(acc, i)
   end
   return acc
 end
 
+function m.rep(v, n)
+  local acc = {}
+  for i=1,n do
+    table.insert(acc, v)
+  end
+  return acc
+end
+
+function m.append(t, t2)
+  for _, v in ipairs(t2) do
+    table.insert(t, v)
+  end
+end
 
 function m.sequence_memo(generator)
   local memo_table = {}
