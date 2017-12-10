@@ -208,7 +208,7 @@ function m.anagram_normalise(word)
 end
 
 function m.puzzle_input(dayn)
-  return io.input(string.format("input/%d.txt",dayn)):read("*a")
+  return io.input(string.format("input/%02d.txt",dayn)):read("*a")
 end
 
 function m.set(items)
