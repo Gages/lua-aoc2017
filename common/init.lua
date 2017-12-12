@@ -237,4 +237,12 @@ function m.values(t)
   return acc  
 end
 
+function m.keys(t)
+  local acc = {}
+  for k, _ in pairs(t) do
+    table.insert(acc, k)
+  end
+  return acc   
+end
+
 return m
