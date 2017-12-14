@@ -1,6 +1,8 @@
 local m = {}
 
 m.bit = require "common.bit"
+m.knot_hash, m.knot_hash_round = require "common.knot_hash" (m)
+m.count_groups, m.find_group = require "common.count_groups" (m)
 
 function m.at(s, i)
     return string.sub(s, i+1, i+1)
@@ -10,6 +12,14 @@ function m.bytes(input)
   local acc = {}
   for i=1,#input do
     table.insert(acc, string.byte(input, i))
+  end
+  return acc
+end
+
+function m.chars(input)
+  local acc = {}
+  for i=1,#input do
+    table.insert(acc, string.sub(input, i, i))
   end
   return acc
 end
@@ -32,6 +42,10 @@ end
 
 function m.lines(input)
   return m.split(input, "\n", true, true)
+end
+
+function m.join(tt)
+  return m.fmap(m.id, tt)
 end
 
 function m.split(input, pattern, plain, keep_empty)
@@ -61,7 +75,23 @@ end
 function m.map(f, t)
   local acc = {}
   for _, v in ipairs(t) do
-    table.insert(acc, f(v))
+    local r = f(v)
+    if r ~= nil then
+      table.insert(acc, r)
+    end
+  end
+  return acc
+end
+
+function m.fmap(f, t)
+  local acc = {}
+  for _, v in ipairs(t) do
+    local r = f(v)
+    if type(r) == "table" then
+      m.append(acc, r)
+    elseif type(r) ~= "nil" then
+      table.insert(acc, r)
+    end
   end
   return acc
 end

@@ -1,20 +1,5 @@
 local common = require "common"
 
-local function find_group(graph, start)
-  local stack = {start}
-  local total = 0
-  local visited = {}
-  while #stack > 0 do
-    local n = table.remove(stack)
-    if not visited[n] then
-      visited[n] = true
-      total = total + 1
-      common.append(stack, graph[n])
-    end
-  end
-  return common.keys(visited)
-end
-
 local function parse_line(line)
   local node, children = string.match(line, "(%d+) %<%-%> (.+)")
   return tonumber(node), common.map(tonumber, common.split(children, ",", true))
@@ -26,7 +11,11 @@ local function build_graph(input)
   for _, v in ipairs(lines) do
     local source, children = parse_line(v)
     if source then
-      graph[source] = children
+      local acc = {}
+      for _, v in ipairs(children) do
+        acc[v] = true
+      end
+      graph[source] =acc
     end
   end
   return graph
@@ -34,22 +23,12 @@ end
 
 function day12_part1(input)
   local graph = build_graph(input)
-  return #find_group(graph, 0)
+  return #common.find_group(graph, 0)
 end
 
 function day12_part2(input)
   local graph = build_graph(input)
-  local start = next(graph) --start from an arbitrary node
-  local groups = 0
-  while start do --stop when there are no nodes remaining to consider.
-    groups = groups + 1 --count this group
-    local group = find_group(graph, start) --get the set of all nodes connected to start, (including start)
-    for _, node in ipairs(group) do
-      graph[node] = nil --remove these nodes from the graph
-    end
-    start = next(graph) --get any node still in the graph
-  end
-  return groups
+  return common.count_groups(graph)
 end
 
 --[[
