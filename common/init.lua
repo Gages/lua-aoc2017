@@ -164,6 +164,23 @@ function m.append(t, t2)
   end
 end
 
+function m.repeat_associative(zero, unit, add, times)
+  local function addntimes(m, acc, accp)
+    if m == 0 then return acc, accp end
+    local n = 1
+    local np = unit
+    local stop = math.floor(m / 2)
+    while n < stop do
+      n = n + n
+      np = add(np, np)
+    end
+    return addntimes(m - n, acc + n, add(accp, np))
+  end
+  local count, result = addntimes(times, 0, zero)
+  assert(count == times)
+  return result
+end
+
 function m.sequence_memo(generator)
   local memo_table = {}
   local current_max = 0
