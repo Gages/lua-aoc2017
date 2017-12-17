@@ -8,6 +8,12 @@ function m.at(s, i)
     return string.sub(s, i+1, i+1)
 end
 
+--wrap: returns p + offset modulus n (with lua's 1-based indexing)
+--for the purpose of circular indexing.
+function m.wrap(p, offset, n)
+  return ((p + offset - 1) % n) + 1
+end
+
 function m.bytes(input)
   local acc = {}
   for i=1,#input do
