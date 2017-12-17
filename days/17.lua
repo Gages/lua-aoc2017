@@ -6,29 +6,21 @@ function day17_helper(input, count, mode)
   local n = tonumber(input)
   local buffer = {0}
   local value_after_zero = nil
-  local zero_pos = 1
   local buffer_len = 1
   local pos = 1
   for i=1,count do
     pos = wrap(pos, n + 1, buffer_len)
     --if the position to insert is one to the right of the zero,
     --record it as the new value_after_zero before doing the insert
-    if pos == wrap(zero_pos, 1, buffer_len) then
+    --insight: zero is always the last item in the buffer (thanks reddit)
+    --therefore one to the right of zero is always 1.
+    if pos == 1 then
       value_after_zero = i
-    end
-    --if the position to insert is smaller than the zero_pos,
-    --shift up the index
-    if pos <= zero_pos then
-      zero_pos = zero_pos + 1
     end
     if mode == "part1" then
       table.insert(buffer, pos, i)
     end
     buffer_len = buffer_len + 1
-    if mode == "part1" then
-      assert(buffer[zero_pos] == 0)
-      assert(buffer[wrap(zero_pos, 1, buffer_len)] == value_after_zero)
-    end
   end
   if mode == "part1" then
     return buffer[wrap(pos, 1, buffer_len)], value_after_zero
