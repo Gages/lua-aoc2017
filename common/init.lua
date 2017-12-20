@@ -110,11 +110,33 @@ function m.max(t)
   return m.fold_offset(math.max, t, t[1], 2)
 end
 
+function m.max_by(f, t)
+  return unpack(m.fold_offset(function(acc, a, i)
+    local fa = f(a)
+    if fa > acc[1] then
+      acc[1] = fa
+      acc[2] = i
+    end
+    return acc
+  end, t, {f(t[1]), 1}, 2))
+end
+
+function m.min_by(f, t)
+  return unpack(m.fold_offset(function(acc, a, i)
+    local fa = f(a)
+    if fa < acc[1] then
+      acc[1] = fa
+      acc[2] = i
+    end
+    return acc
+  end, t, {f(t[1]), 1}, 2))
+end
+
 function m.fold_offset(f, t, acc, i)
   if i > #t then
     return acc
   else
-    return m.fold_offset(f, t, f(acc, t[i]), i+1)
+    return m.fold_offset(f, t, f(acc, t[i], i), i+1)
   end
 end
 
@@ -213,6 +235,8 @@ function m.count(pred, t)
 end
 
 function m.id(x) return x end
+
+function m.gt(a, b) return a > b end
 
 function m.filter(pred, t)
     local acc =  {}
