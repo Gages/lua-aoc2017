@@ -122,21 +122,29 @@ function m.max_by(f, t)
 end
 
 function m.min_by(f, t)
-  return unpack(m.fold_offset(function(acc, a, i)
+  return unpack(m.foldi_offset(function(acc, a, i)
     local fa = f(a)
     if fa < acc[1] then
       acc[1] = fa
       acc[2] = i
     end
     return acc
-  end, t, {f(t[1]), 1}, 2))
+  end, t, {f(t[1], 1), 1}, 2))
 end
 
 function m.fold_offset(f, t, acc, i)
   if i > #t then
     return acc
   else
-    return m.fold_offset(f, t, f(acc, t[i], i), i+1)
+    return m.fold_offset(f, t, f(acc, t[i]), i+1)
+  end
+end
+
+function m.foldi_offset(f, t, acc, i)
+  if i > #t then
+    return acc
+  else
+    return m.foldi_offset(f, t, f(acc, t[i], i), i+1)
   end
 end
 
@@ -161,6 +169,10 @@ function m.compose(f, g)
   return function(...)
     return g(f(...))
   end
+end
+
+function m.curry(f, arg1)
+  return function(...) return f(arg1, ...) end
 end
 
 function m.range(start, stop, step)
